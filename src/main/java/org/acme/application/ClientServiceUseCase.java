@@ -6,7 +6,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.acme.cross.dto.PageResponseDto;
 import org.acme.domain.ClientService;
-import org.acme.infrastructure.input.rest.dto.ApiReponse;
+import org.acme.infrastructure.input.rest.dto.ApiResponse;
 import org.acme.infrastructure.input.rest.dto.ClientDto;
 import org.acme.infrastructure.mapper.ClientMapper;
 import org.acme.infrastructure.output.persistence.entity.Client;
@@ -33,7 +33,7 @@ public class ClientServiceUseCase implements ClientService {
 
     @Transactional
     @Override
-    public ApiReponse<ClientDto> createClient(ClientDto clientDto) {
+    public ApiResponse<ClientDto> createClient(ClientDto clientDto) {
 
         Client client = clientMapper.toEntity(clientDto);
 
@@ -41,30 +41,30 @@ public class ClientServiceUseCase implements ClientService {
 
         log.info("ID CLIENT:{}", client.getId().toString());
 
-        ApiReponse<ClientDto> apiReponse = new ApiReponse<>();
-        apiReponse.setData(clientMapper.toDto(client));
-        apiReponse.setStatus(HttpResponseStatus.CREATED.code());
-        apiReponse.setDescription(HttpResponseStatus.CREATED.reasonPhrase());
+        ApiResponse<ClientDto> apiResponse = new ApiResponse<>();
+        apiResponse.setData(clientMapper.toDto(client));
+        apiResponse.setStatus(HttpResponseStatus.CREATED.code());
+        apiResponse.setDescription(HttpResponseStatus.CREATED.reasonPhrase());
 
-        return apiReponse;
+        return apiResponse;
     }
 
     @Override
-    public ApiReponse<ClientDto> findClientsById(String id) {
+    public ApiResponse<ClientDto> findClientsById(String id) {
 
         Client client = clienteReadRepo.searchById(UUID.fromString(id)).orElseThrow(NoSuchElementException::new);
 
-        ApiReponse<ClientDto> apiReponse = new ApiReponse<>();
-        apiReponse.setData(clientMapper.toDto(client));
-        apiReponse.setStatus(HttpResponseStatus.OK.code());
-        apiReponse.setDescription(HttpResponseStatus.OK.reasonPhrase());
+        ApiResponse<ClientDto> apiResponse = new ApiResponse<>();
+        apiResponse.setData(clientMapper.toDto(client));
+        apiResponse.setStatus(HttpResponseStatus.OK.code());
+        apiResponse.setDescription(HttpResponseStatus.OK.reasonPhrase());
 
-        return apiReponse;
+        return apiResponse;
 
     }
 
     @Override
-    public ApiReponse<ClientDto> getClientsSearchParams(String searchParam, int page, int limit) {
+    public ApiResponse<ClientDto> getClientsSearchParams(String searchParam, int page, int limit) {
 
         PageResponseDto<ClientDto> pageResponseDto;
 
@@ -74,15 +74,15 @@ public class ClientServiceUseCase implements ClientService {
             pageResponseDto = clienteReadRepo.getAllClientsPaginated(page, limit);
         }
 
-        ApiReponse<ClientDto> apiReponse = new ApiReponse<>();
-        apiReponse.setElements(pageResponseDto.data());
-        apiReponse.setCurrentPage(pageResponseDto.currentPage());
-        apiReponse.setTotalElements((int)pageResponseDto.totalElements());
-        apiReponse.setTotalPages(pageResponseDto.totalPages());
-        apiReponse.setStatus(HttpResponseStatus.OK.code());
-        apiReponse.setDescription(HttpResponseStatus.OK.reasonPhrase());
+        ApiResponse<ClientDto> apiResponse = new ApiResponse<>();
+        apiResponse.setElements(pageResponseDto.data());
+        apiResponse.setCurrentPage(pageResponseDto.currentPage());
+        apiResponse.setTotalElements((int)pageResponseDto.totalElements());
+        apiResponse.setTotalPages(pageResponseDto.totalPages());
+        apiResponse.setStatus(HttpResponseStatus.OK.code());
+        apiResponse.setDescription(HttpResponseStatus.OK.reasonPhrase());
 
-        return apiReponse;
+        return apiResponse;
 
 
     }

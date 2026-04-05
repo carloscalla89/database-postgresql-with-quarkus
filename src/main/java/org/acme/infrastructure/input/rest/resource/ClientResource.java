@@ -5,8 +5,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.acme.domain.ClientService;
-import org.acme.domain.OrderService;
-import org.acme.infrastructure.input.rest.dto.ApiReponse;
+import org.acme.infrastructure.input.rest.dto.ApiResponse;
 import org.acme.infrastructure.input.rest.dto.ClientDto;
 
 @Slf4j
@@ -24,18 +23,18 @@ public class ClientResource {
     @POST
     public Response createClient(ClientDto clientDto) {
 
-        ApiReponse<ClientDto> apiReponse = clientService.createClient(clientDto);
+        ApiResponse<ClientDto> apiResponse = clientService.createClient(clientDto);
 
-        return Response.status(apiReponse.getStatus()).entity(apiReponse).build();
+        return Response.status(apiResponse.getStatus()).entity(apiResponse).build();
     }
 
     @GET
     @Path("/{clientId}")
     public Response searchClientByID(@PathParam("clientId") String clientId) {
 
-        ApiReponse<ClientDto> apiReponse = clientService.findClientsById(clientId);
+        ApiResponse<ClientDto> apiResponse = clientService.findClientsById(clientId);
 
-        return Response.status(apiReponse.getStatus()).entity(apiReponse).build();
+        return Response.status(apiResponse.getStatus()).entity(apiResponse).build();
 
     }
 
@@ -45,9 +44,9 @@ public class ClientResource {
             @QueryParam("limit") @DefaultValue("10") int limit,
             @QueryParam("searchParam") String searchParam) {
 
-        ApiReponse<ClientDto> apiReponse = clientService.getClientsSearchParams(searchParam, page, limit);
+        ApiResponse<ClientDto> apiResponse = clientService.getClientsSearchParams(searchParam, page, limit);
 
-        return Response.status(apiReponse.getStatus()).entity(apiReponse).build();
+        return Response.status(apiResponse.getStatus()).entity(apiResponse).build();
 
     }
 }

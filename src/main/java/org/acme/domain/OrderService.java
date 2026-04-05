@@ -1,12 +1,12 @@
 package org.acme.domain;
 
-import org.acme.infrastructure.input.rest.dto.ApiReponse;
+import org.acme.infrastructure.input.rest.dto.ApiResponse;
 import org.acme.infrastructure.input.rest.dto.OrderDto;
 
 import java.util.List;
 
 public interface OrderService {
 
-    ApiReponse<OrderDto> createOrder(OrderDto orderDto);
-    ApiReponse<List<OrderDto>> listOrdersByClient(String clientId);
+    ApiResponse<OrderDto> createOrder(OrderDto orderDto);
+    ApiResponse<List<OrderDto>> listOrdersByClient(String clientId);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @RegisterForReflection
-public class ApiReponse<T> {
+public class ApiResponse<T> {
 
     private List<T> elements;
     private T data;

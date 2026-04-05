@@ -40,7 +40,7 @@ public class OrderServiceUseCase implements OrderService {
 
         OrderClient orderClient = orderMapper.toEntity(orderDto, client);
 
-        pedidoWriteRepo.registrar(orderClient);
+        pedidoWriteRepo.saveEntity(orderClient);
 
         ApiReponse<OrderDto> apiReponse = new ApiReponse<>();
         apiReponse.setData(OrderDto.builder().id(orderClient.getId().toString()).build());

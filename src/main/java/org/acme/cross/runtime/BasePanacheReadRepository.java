@@ -1,8 +1,11 @@
 package org.acme.cross.runtime;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.panache.common.Page;
 import jakarta.persistence.Query;
 import jakarta.persistence.Tuple;
+import org.acme.cross.dto.PageResponseDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,5 +52,37 @@ public abstract class BasePanacheReadRepository<T, ID> implements PanacheReposit
         return results.stream()
                 .map(mapper)
                 .toList();
+    }
+
+    /**
+     * Helper DINÁMICO para paginar cualquier consulta Panache y mapearla a un DTO.
+     *
+     * @param query  La consulta de Panache (ya filtrada u ordenada si se desea).
+     * @param page   El número de página solicitada (empezando desde 1).
+     * @param limit  La cantidad de registros por página.
+     * @param mapper Función Lambda para convertir la Entidad (T) en DTO (R).
+     * @param <R>    El tipo de DTO resultante.
+     * @return       Objeto con la lista mapeada y la metadata de paginación.
+     */
+    protected <R> PageResponseDto<R> getPaginatedResults(
+            PanacheQuery<T> query,
+            int page,
+            int limit,
+            Function<T, R> mapper) {
+
+        // 1. Aplicar la paginación de la base de datos (OFFSET / LIMIT)
+        query.page(Page.of(page - 1, limit));
+
+        // 2. Extraer metadatos con conteo optimizado
+        long totalElements = query.count();
+        int totalPages = query.pageCount();
+
+        // 3. Ejecutar la consulta y transformar la lista usando el mapper
+        List<R> dtoList = query.list().stream()
+                .map(mapper)
+                .toList();
+
+        // 4. Retornar el empaquetado final
+        return new PageResponseDto<>(dtoList, page, limit, totalElements, totalPages);
     }
 }

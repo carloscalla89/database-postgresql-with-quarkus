@@ -17,8 +17,12 @@ import java.util.List;
 @RegisterForReflection
 public class ApiReponse<T> {
 
-    private List<T> list;
+    private List<T> elements;
     private T data;
     private Integer status;
     private String description;
+    private Integer currentPage;
+    private Integer totalPages;
+    private Integer totalElements;
+
 }

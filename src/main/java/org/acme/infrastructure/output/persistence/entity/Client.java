@@ -17,7 +17,6 @@ public class Client extends BaseAuditEntity {
     // 1. Llave Primaria Centralizada
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(java.sql.Types.VARCHAR)
     private UUID id;
 
     @Column(name = "first_name", nullable = false, length = 100)

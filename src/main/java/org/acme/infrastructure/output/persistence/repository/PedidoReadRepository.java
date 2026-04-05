@@ -32,22 +32,22 @@ public class PedidoReadRepository extends BasePanacheReadRepository<OrderClient,
         // 1. Defines tu SQL con los campos específicos
         String sql = "SELECT id, total FROM order_client WHERE client_id = ?1";
 
-        // 2. Llamas a tu nuevo método dinámico
         return executeNativeQueryToDto(
                 sql,
-                // 3. Este bloque es el "mapper". Define cómo se extraen los campos de este query específico.
                 tuple -> {
-                    // Recuerda: Db2 devuelve las columnas en MAYÚSCULAS
-                    String idStr = tuple.get("ID", String.class);
-                    BigDecimal total = tuple.get("TOTAL", BigDecimal.class);
+                    // CAMBIO 1: PostgreSQL devuelve minúsculas ("id", "total").
+                    // CAMBIO 2: Extraemos el "id" como java.util.UUID.class, y luego le hacemos .toString() para el DTO.
+                    String idStr = tuple.get("id", java.util.UUID.class).toString();
+                    BigDecimal total = tuple.get("total", BigDecimal.class);
 
                     return OrderDto.builder()
                             .id(idStr)
                             .mount(total)
                             .build();
                 },
-                // 4. Pasas los parámetros dinámicos
-                clientId.toString()
+                // CAMBIO 3: Pasamos el objeto UUID directamente, SIN el .toString().
+                // Hibernate es lo suficientemente inteligente para mapear el objeto UUID de Java al tipo UUID de Postgres.
+                clientId
         );
 
 

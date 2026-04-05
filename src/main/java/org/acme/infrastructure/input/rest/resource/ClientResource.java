@@ -38,4 +38,16 @@ public class ClientResource {
         return Response.status(apiReponse.getStatus()).entity(apiReponse).build();
 
     }
+
+    @GET
+    public Response searchClientSearchParam(
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("limit") @DefaultValue("10") int limit,
+            @QueryParam("searchParam") String searchParam) {
+
+        ApiReponse<ClientDto> apiReponse = clientService.getClientsSearchParams(searchParam, page, limit);
+
+        return Response.status(apiReponse.getStatus()).entity(apiReponse).build();
+
+    }
 }

@@ -7,4 +7,5 @@ public interface ClientService {
 
     ApiReponse<ClientDto> createClient(ClientDto clientDto);
     ApiReponse<ClientDto> findClientsById(String id);
+    ApiReponse<ClientDto> getClientsSearchParams(String searchParam, int page, int limit);
 }

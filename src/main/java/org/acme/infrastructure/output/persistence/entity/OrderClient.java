@@ -16,7 +16,6 @@ public class OrderClient extends BaseAuditEntity {
     // 1. Llave Primaria Centralizada
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(java.sql.Types.VARCHAR)
     private UUID id;
 
     // Mapeo del DECIMAL(10, 2) de tu script Flyway

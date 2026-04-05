@@ -4,6 +4,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.acme.cross.dto.PageResponseDto;
 import org.acme.domain.ClientService;
 import org.acme.infrastructure.input.rest.dto.ApiReponse;
 import org.acme.infrastructure.input.rest.dto.ClientDto;
@@ -36,7 +37,7 @@ public class ClientServiceUseCase implements ClientService {
 
         Client client = clientMapper.toEntity(clientDto);
 
-        clienteWriteRepo.registrar(client);
+        clienteWriteRepo.saveEntity(client);
 
         log.info("ID CLIENT:{}", client.getId().toString());
 
@@ -59,6 +60,30 @@ public class ClientServiceUseCase implements ClientService {
         apiReponse.setDescription(HttpResponseStatus.OK.reasonPhrase());
 
         return apiReponse;
+
+    }
+
+    @Override
+    public ApiReponse<ClientDto> getClientsSearchParams(String searchParam, int page, int limit) {
+
+        PageResponseDto<ClientDto> pageResponseDto;
+
+        if (searchParam != null) {
+            pageResponseDto = clienteReadRepo.getClientsSearchParamPaginated(searchParam, page, limit);
+        } else {
+            pageResponseDto = clienteReadRepo.getAllClientsPaginated(page, limit);
+        }
+
+        ApiReponse<ClientDto> apiReponse = new ApiReponse<>();
+        apiReponse.setElements(pageResponseDto.data());
+        apiReponse.setCurrentPage(pageResponseDto.currentPage());
+        apiReponse.setTotalElements((int)pageResponseDto.totalElements());
+        apiReponse.setTotalPages(pageResponseDto.totalPages());
+        apiReponse.setStatus(HttpResponseStatus.OK.code());
+        apiReponse.setDescription(HttpResponseStatus.OK.reasonPhrase());
+
+        return apiReponse;
+
 
     }
 

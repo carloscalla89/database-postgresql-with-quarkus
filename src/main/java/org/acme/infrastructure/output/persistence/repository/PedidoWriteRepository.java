@@ -4,8 +4,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.cross.runtime.BasePanacheWriteRepository;
 import org.acme.infrastructure.output.persistence.entity.OrderClient;
 
+import java.util.UUID;
+
 // --- Repositorio de Escritura para PEDIDO ---
 @ApplicationScoped
-public class PedidoWriteRepository extends BasePanacheWriteRepository<OrderClient> {
+public class PedidoWriteRepository extends BasePanacheWriteRepository<OrderClient, UUID> {
     // Hereda operaciones transaccionales hacia DB2
 }
